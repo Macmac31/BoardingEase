@@ -7,6 +7,7 @@ const detailsContainer = document.querySelector(".detail");
 const searchCount = document.querySelector(".search__count");
 const fieldInput = document.querySelector(".field__input");
 
+
 const markupGenerator = (listing) => {
   // Gi destructure nato dire ang object
   const {
@@ -133,6 +134,22 @@ resultsList.addEventListener("click", (event) => {
 
   detailsContainer.innerHTML = detailMarkUpGenerator(listing);
 });
+// SEARCH ADDED FUNCTIONALITY 
+fieldInput.addEventListener("input", (event) => {
+  const searchValue = event.target.value.toLowerCase();
+
+  if (searchValue === "") {
+    newListings = listings;
+  } else { 
+    newListings = listings.filter((listing) =>
+      listing.name.toLowerCase().includes(searchValue)
+    );
+  } 
+  results();
+  searchCount.textContent = `${newListings.length} listings found`;
+});
+// RENT ADDED FUNCTIONALITY
+
 
 // ------------- ACTIVITY (Build the search functionality) -------------
 
