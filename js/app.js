@@ -6,6 +6,8 @@ const resultsList = document.querySelector(".results__list");
 const detailsContainer = document.querySelector(".detail");
 const searchCount = document.querySelector(".search__count");
 const fieldInput = document.querySelector(".field__input");
+const maxRentInput = document.querySelector("#max-rent");
+const searchForm = document.querySelector("#search-form");
 
 
 const markupGenerator = (listing) => {
@@ -79,7 +81,7 @@ results();
 // Show the results
 // Revert the list when search value is empty
 
-const detailMarkUpGenerator = (listing) => {
+  const detailMarkUpGenerator = (listing) => {
   const { name, barangay, monthlyRent } = listing;
 
   return `
@@ -121,7 +123,7 @@ const detailMarkUpGenerator = (listing) => {
             </p>
           </div>        
   `;
-};
+  };
 
 resultsList.addEventListener("click", (event) => {
   const card = event.target.closest(".card");
@@ -134,9 +136,38 @@ resultsList.addEventListener("click", (event) => {
 
   detailsContainer.innerHTML = detailMarkUpGenerator(listing);
 });
+
+
+maxRentInput.addEventListener("input", (e) => {
+  const maxRent = e.target.value;
+  if (maxRent === "") newListing = listings;
+  else
+    newListing = listing.filter((listing) => listing.monthlyRent <= maxRent);
+  results();
+});
+
+const applyFilter = () => {
+  const query = fieldInput.value.toLowerCase().trim();
+  const maxRent = maxRentInput.value;
+  newListing = listing.filter((listing) => {
+    const matchesQuery = query === "" || listing.name.includes(query);
+    const matchesRent = maxRent === "" || listing.monthlyRent <= Number(maxRent);
+    return matchesQuery && matchesRent;
+   
+  });
+   results();
+
+};
+
+fieldInput.addEventListener("input", applyFilter);
+maxRentInput.addEventListener("input", applyFilter);
+applyFilter();
+results();
+
+
 // SEARCH ADDED FUNCTIONALITY 
-fieldInput.addEventListener("input", (event) => {
-  const searchValue = event.target.value.toLowerCase();
+/*fieldInput.addEventListener("input", (event) => {
+  const searchValue = event.target.value.toLowerCase().trim();
 
   if (searchValue === "") {
     newListings = listings;
@@ -147,7 +178,7 @@ fieldInput.addEventListener("input", (event) => {
   } 
   results();
   searchCount.textContent = `${newListings.length} listings found`;
-});
+});*/
 // RENT ADDED FUNCTIONALITY
 
 
